@@ -1,0 +1,18 @@
+[
+  {
+    "modid": "VotingSupport",
+    "name": "VotingSupport",
+    "description": "Voting Support Forge/Sponge Mod offering a vote leaderboard, storage, and other stuff",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "github.com/adainish",
+    "updateUrl": "",
+    "authorList": [
+      "Winglet"
+    ],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]
