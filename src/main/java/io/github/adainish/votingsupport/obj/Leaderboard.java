@@ -6,7 +6,9 @@ import java.util.UUID;
 
 public class Leaderboard {
 
+    private List<VoterSpot> cachedVoterSpots = new ArrayList <>();
     private List <UUID> playerUUIDList = new ArrayList <>();
+    private long lastExecutedVoterCommands;
 
     public Leaderboard() {
 

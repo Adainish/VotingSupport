@@ -97,9 +97,9 @@ repositories {
     // ForgeGradle automatically adds the Forge maven and Maven Central for you
 
     // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
-    // flatDir {
-    //     dir 'libs'
-    // }
+     flatDir {
+         dir 'libs'
+     }
     maven {
         url "https://repo.spongepowered.org/maven/"
     }
@@ -137,6 +137,7 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2860'
     implementation 'reforged:server:8.3.6@Pixelmon-1.12.2-8.3.6-server.jar'
     compileOnly 'org.spongepowered:spongeapi:7.2.0-SNAPSHOT'
+    implementation fileTree(dir: 'libs', include: '*.jar')
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
     // runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}") // Adds the full JEI mod as a runtime dependency

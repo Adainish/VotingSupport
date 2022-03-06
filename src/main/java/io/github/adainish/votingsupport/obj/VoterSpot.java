@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class VoterSpot {
+    private String rewardIdentifier;
     private UUID uuid;
     private String userName;
     private int position;
@@ -14,7 +15,14 @@ public class VoterSpot {
     private boolean received;
 
     public VoterSpot(UUID uuid, int position, int totalVotes, String identifier) {
+        setRewardIdentifier(identifier);
         setUuid(uuid);
+        setPosition(position);
+        setTotalVotes(totalVotes);
+    }
+
+    public void loadVoteRewards() {
+
     }
 
     public UUID getUuid() {
@@ -71,5 +79,13 @@ public class VoterSpot {
 
     public void setReceived(boolean received) {
         this.received = received;
+    }
+
+    public String getRewardIdentifier() {
+        return rewardIdentifier;
+    }
+
+    public void setRewardIdentifier(String rewardIdentifier) {
+        this.rewardIdentifier = rewardIdentifier;
     }
 }
