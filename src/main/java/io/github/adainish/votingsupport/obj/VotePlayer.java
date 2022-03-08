@@ -33,6 +33,22 @@ public class VotePlayer {
 
     }
 
+    public void increaseVote(int i) {
+        this.voteCount += i;
+    }
+
+    public void increaseVote() {
+        this.voteCount++;
+    }
+
+    public void decreaseVote() {
+        this.voteCount--;
+    }
+
+    public void decreaseVote(int i) {
+        this.voteCount -= i;
+    }
+
     public UUID getUuid() {
         return uuid;
     }
