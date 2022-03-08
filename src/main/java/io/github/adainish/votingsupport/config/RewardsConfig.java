@@ -20,7 +20,7 @@ public class RewardsConfig extends Configurable{
     @Override
     public void populate() {
 
-        this.get().getNode("").setValue("").setComment("");
+        this.get().getNode("Rewards", "VoteRewards", "").setValue("").setComment("");
 
     }
 

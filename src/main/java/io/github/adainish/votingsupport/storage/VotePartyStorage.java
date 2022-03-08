@@ -3,7 +3,6 @@ package io.github.adainish.votingsupport.storage;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import io.github.adainish.votingsupport.VotingSupport;
-import io.github.adainish.votingsupport.obj.Leaderboard;
 import io.github.adainish.votingsupport.obj.VoteParty;
 import io.github.adainish.votingsupport.util.Adapters;
 
@@ -64,7 +63,6 @@ public class VotePartyStorage {
             e.printStackTrace();
         }
 
-        //update cache method
     }
 
     public static VoteParty getVoteParty() {

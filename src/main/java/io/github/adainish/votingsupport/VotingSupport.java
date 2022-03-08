@@ -32,6 +32,7 @@ public class VotingSupport {
     public static final String MOD_NAME = "VotingSupport";
     public static final String VERSION = "1.0-SNAPSHOT";
     public static final String AUTHORS = "Winglet";
+    public static final String YEAR = "2022";
     public static Logger log = LogManager.getLogger(MOD_NAME);
 
     private static HashMap<UUID, VotePlayer> votePlayers = new HashMap <>();
@@ -56,6 +57,12 @@ public class VotingSupport {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        log.info("Booting up %n by %authors %v %y"
+                .replace("%n", MOD_NAME)
+                .replace("%authors", AUTHORS)
+                .replace("%v", VERSION)
+                .replace("%y", YEAR)
+        );
         setConfigDir(new File(event.getModConfigurationDirectory() + "/"));
         configDir.mkdirs();
         setDataDir(new File(configDir + "/VotingSupport/data/"));
