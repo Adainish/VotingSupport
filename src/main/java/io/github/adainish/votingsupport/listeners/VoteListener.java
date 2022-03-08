@@ -6,6 +6,8 @@ import io.github.adainish.votingsupport.VotingSupport;
 import io.github.adainish.votingsupport.obj.VotePlayer;
 import io.github.adainish.votingsupport.storage.PlayerStorage;
 import io.github.adainish.votingsupport.util.ProfileFetcher;
+import io.github.adainish.votingsupport.util.Util;
+import net.minecraft.entity.player.EntityPlayerMP;
 import org.spongepowered.api.event.Listener;
 
 import java.io.IOException;
@@ -29,7 +31,19 @@ public class VoteListener {
             return;
         }
         VotePlayer player = PlayerStorage.getPlayer(uuid);
+        if (player == null) {
+            EntityPlayerMP p = Util.getPlayer(uuid);
+            PlayerStorage.makeVotePlayer(p);
+            player = PlayerStorage.getPlayer(uuid);
+        }
         VotingSupport.log.info("Vote received from " + vote.getUsername());
+
+        if (player != null) {
+            player.increaseVote();
+            player.setLastVoted(System.currentTimeMillis());
+            //execute reward handling
+            PlayerStorage.savePlayer(player);
+        }
 
     }
 }

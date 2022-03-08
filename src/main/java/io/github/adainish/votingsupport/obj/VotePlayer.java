@@ -10,6 +10,7 @@ public class VotePlayer {
     private String userName;
     private int voteCount;
     private Streak streak;
+    private long lastVoted;
 
     public VotePlayer(UUID uuid) {
         setUuid(uuid);
@@ -22,6 +23,7 @@ public class VotePlayer {
     }
 
     public void initialiseStreak() {
+        streak = new Streak("");
 
     }
 
@@ -79,5 +81,13 @@ public class VotePlayer {
 
     public void setStreak(Streak streak) {
         this.streak = streak;
+    }
+
+    public long getLastVoted() {
+        return lastVoted;
+    }
+
+    public void setLastVoted(long lastVoted) {
+        this.lastVoted = lastVoted;
     }
 }

@@ -9,7 +9,7 @@ public class Streak {
     private long lastUpdated;
     private List <StreakDay> streakDayList = new ArrayList<>();
 
-    public Streak() {
+    public Streak(String permissionNode) {
 
     }
 
