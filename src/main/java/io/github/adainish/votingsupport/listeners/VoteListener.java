@@ -27,7 +27,9 @@ public class VoteListener {
             e.printStackTrace();
             return;
         } catch (NullPointerException e) {
-            VotingSupport.log.info("%n tried voting, it was received but the user doesn't exist according to mojang!".replace("%n", event.getVote().getUsername()));
+            VotingSupport.log.info("%n tried voting, it was received but the user doesn't exist according to mojang!"
+                    .replace("%n", event.getVote().getUsername())
+            );
             return;
         }
         VotePlayer player = PlayerStorage.getPlayer(uuid);
