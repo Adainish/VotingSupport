@@ -1,11 +1,8 @@
 package io.github.adainish.votingsupport.obj;
 
-import io.github.adainish.votingsupport.util.ProfileFetcher;
 import io.github.adainish.votingsupport.util.Util;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 
-import java.io.IOException;
 import java.util.UUID;
 
 public class VotePlayer {

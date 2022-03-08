@@ -1,5 +1,6 @@
 package io.github.adainish.votingsupport;
 
+import com.cable.library.tasks.Task;
 import io.github.adainish.votingsupport.config.*;
 import io.github.adainish.votingsupport.listeners.PlayerListener;
 import io.github.adainish.votingsupport.obj.Leaderboard;
@@ -80,6 +81,8 @@ public class VotingSupport {
     @Mod.EventHandler
     public void onServerStarting(FMLServerStartingEvent event) {
         loadObjects();
+        Task.builder().infiniteIterations().interval( (20 * 60) * 5).build();
+        //Register Commands
     }
 
 

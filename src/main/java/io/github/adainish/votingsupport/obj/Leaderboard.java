@@ -1,5 +1,7 @@
 package io.github.adainish.votingsupport.obj;
 
+import io.github.adainish.votingsupport.config.LeaderBoardConfig;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -13,7 +15,8 @@ public class Leaderboard {
     private int validDays;
 
     public Leaderboard() {
-
+        setInitialisedTime(System.currentTimeMillis());
+        setValidDays(LeaderBoardConfig.getConfig().get().getNode("LeaderBoard", "ValidDays").getInt());
     }
 
     public List <UUID> getPlayerUUIDList() {
@@ -38,5 +41,21 @@ public class Leaderboard {
 
     public void setLastExecutedVoterCommands(long lastExecutedVoterCommands) {
         this.lastExecutedVoterCommands = lastExecutedVoterCommands;
+    }
+
+    public long getInitialisedTime() {
+        return initialisedTime;
+    }
+
+    public void setInitialisedTime(long initialisedTime) {
+        this.initialisedTime = initialisedTime;
+    }
+
+    public int getValidDays() {
+        return validDays;
+    }
+
+    public void setValidDays(int validDays) {
+        this.validDays = validDays;
     }
 }
