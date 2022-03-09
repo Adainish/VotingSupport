@@ -4,6 +4,7 @@ import io.github.adainish.votingsupport.util.Util;
 import net.minecraft.entity.player.EntityPlayerMP;
 
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class VotePlayer {
     private UUID uuid;
@@ -11,6 +12,7 @@ public class VotePlayer {
     private int voteCount;
     private Streak streak;
     private long lastVoted;
+    private long resetTimer;
 
     public VotePlayer(UUID uuid) {
         setUuid(uuid);
@@ -21,6 +23,15 @@ public class VotePlayer {
         } catch (NullPointerException e) {
             setUserName("");
         }
+    }
+
+    public boolean streakExpired() {
+
+        return false;
+    }
+
+    public void updateStreakProgress() {
+
     }
 
     public void initialiseStreak() {
@@ -90,5 +101,24 @@ public class VotePlayer {
 
     public void setLastVoted(long lastVoted) {
         this.lastVoted = lastVoted;
+    }
+
+    public long getResetTimer() {
+        return resetTimer;
+    }
+
+    public void setResetTimer(long resetTimer) {
+        this.resetTimer = resetTimer;
+    }
+
+    public long timer() {
+        return ((getResetTimer() *1000 - (System.currentTimeMillis() - getLastVoted())) / 1000);
+    }
+    public String timeLeftSeconds() {
+        long timer = ((getResetTimer() * 1000 - (System.currentTimeMillis() - getLastVoted()) / 1000));
+        return String.valueOf(TimeUnit.SECONDS.toSeconds(timer));
+    }
+    public String timeLeftMinutes() {
+        return String.valueOf(TimeUnit.SECONDS.toMinutes(timer()));
     }
 }
