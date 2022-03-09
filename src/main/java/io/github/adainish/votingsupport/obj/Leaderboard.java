@@ -13,10 +13,12 @@ public class Leaderboard {
     private long lastExecutedVoterCommands;
     private long initialisedTime;
     private int validDays;
+    private boolean automatic;
 
     public Leaderboard() {
         setInitialisedTime(System.currentTimeMillis());
         setValidDays(LeaderBoardConfig.getConfig().get().getNode("LeaderBoard", "ValidDays").getInt());
+        setAutomatic(LeaderBoardConfig.getConfig().get().getNode("LeaderBoard", "Automatic").getBoolean());
     }
 
     public List <UUID> getPlayerUUIDList() {
@@ -57,5 +59,13 @@ public class Leaderboard {
 
     public void setValidDays(int validDays) {
         this.validDays = validDays;
+    }
+
+    public boolean isAutomatic() {
+        return automatic;
+    }
+
+    public void setAutomatic(boolean automatic) {
+        this.automatic = automatic;
     }
 }

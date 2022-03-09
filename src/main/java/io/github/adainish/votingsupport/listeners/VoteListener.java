@@ -47,5 +47,8 @@ public class VoteListener {
             PlayerStorage.savePlayer(player);
         }
 
+        VotingSupport.getParty().increaseCurrentVotes();
+
+
     }
 }

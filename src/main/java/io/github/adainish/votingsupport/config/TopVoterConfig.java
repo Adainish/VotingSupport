@@ -20,7 +20,7 @@ public class TopVoterConfig extends Configurable{
     @Override
     public void populate() {
 
-        this.get().getNode("").setValue("").setComment("");
+        this.get().getNode("TopVoter", "").setValue("").setComment("");
 
     }
 

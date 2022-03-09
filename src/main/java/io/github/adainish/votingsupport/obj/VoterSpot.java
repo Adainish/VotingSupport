@@ -21,10 +21,6 @@ public class VoterSpot {
         setTotalVotes(totalVotes);
     }
 
-    public void loadVoteRewards() {
-
-    }
-
     public UUID getUuid() {
         return uuid;
     }

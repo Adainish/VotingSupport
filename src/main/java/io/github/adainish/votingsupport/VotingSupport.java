@@ -8,6 +8,7 @@ import io.github.adainish.votingsupport.obj.VoteParty;
 import io.github.adainish.votingsupport.obj.VotePlayer;
 import io.github.adainish.votingsupport.storage.LeaderboardStorage;
 import io.github.adainish.votingsupport.storage.VotePartyStorage;
+import io.github.adainish.votingsupport.tasks.UpdateStorageTask;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -81,7 +82,7 @@ public class VotingSupport {
     @Mod.EventHandler
     public void onServerStarting(FMLServerStartingEvent event) {
         loadObjects();
-        Task.builder().infiniteIterations().interval( (20 * 60) * 5).build();
+        Task.builder().infiniteIterations().interval( (20 * 60) * 5).execute(new UpdateStorageTask()).build();
         //Register Commands
     }
 
@@ -150,6 +151,7 @@ public class VotingSupport {
         StreakConfig.getConfig().setup();
         VotePartyConfig.getConfig().setup();
         TopVoterConfig.getConfig().setup();
+        LeaderBoardConfig.getConfig().setup();
     }
     public static void loadConfigs() {
         MainConfig.getConfig().load();
@@ -158,6 +160,7 @@ public class VotingSupport {
         StreakConfig.getConfig().load();
         VotePartyConfig.getConfig().load();
         TopVoterConfig.getConfig().load();
+        LeaderBoardConfig.getConfig().load();
     }
     public static void loadObjects() {
         initialiseLeaderBoard();
