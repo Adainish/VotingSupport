@@ -1,5 +1,11 @@
 package io.github.adainish.votingsupport.config;
 
+import io.github.adainish.votingsupport.enums.RewardTypes;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class RewardsConfig extends Configurable{
     private static RewardsConfig config;
 
@@ -20,8 +26,18 @@ public class RewardsConfig extends Configurable{
     @Override
     public void populate() {
 
-        this.get().getNode("Rewards", "VoteRewards", "").setValue("").setComment("");
-
+        List<String> rewardTypes = new ArrayList<>();
+        for (RewardTypes t: RewardTypes.values()) {
+            rewardTypes.add(t.name());
+        }
+        this.get().getNode("RewardTypes").setValue(rewardTypes).setComment("The types of Rewards that can be worked with");
+        this.get().getNode("Rewards",  "Reward", "Display").setValue("&bA Reward").setComment("The display");
+        this.get().getNode("Rewards",  "Reward", "Item").setValue("minecraft:paper").setComment("what item represents this reward");
+        this.get().getNode("Rewards",  "Reward", "Lore").setValue(Arrays.asList("")).setComment("The item lore when displayed");
+        this.get().getNode("Rewards",  "Reward", "Frequency").setValue(1).setComment("The rarity of this item when calculating the chance for it to be given when relevant");
+        this.get().getNode("Rewards",  "Reward", "CommandList").setValue(Arrays.asList("")).setComment("The commands to be executed when this reward is received");
+        this.get().getNode("Rewards",  "Reward", "Permission").setValue("reward.example").setComment("The permission needed to be able to obtain this reward");
+        this.get().getNode("Rewards",  "Reward", "Type").setValue("").setComment("The type of reward this reward is");
     }
 
     @Override

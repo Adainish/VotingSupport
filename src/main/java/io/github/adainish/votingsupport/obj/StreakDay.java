@@ -1,5 +1,7 @@
 package io.github.adainish.votingsupport.obj;
 
+import io.github.adainish.votingsupport.obj.rewards.VoteReward;
+
 import java.util.ArrayList;
 import java.util.List;
 
