@@ -1,8 +1,12 @@
 package io.github.adainish.votingsupport.obj;
 
+import io.github.adainish.votingsupport.VotingSupport;
+import io.github.adainish.votingsupport.obj.rewards.VoteReward;
+import io.github.adainish.votingsupport.util.PermissionUtil;
 import io.github.adainish.votingsupport.util.Util;
 import net.minecraft.entity.player.EntityPlayerMP;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -12,6 +16,7 @@ public class VotePlayer {
     private int voteCount;
     private Streak streak;
     private long lastVoted;
+    private long lastStreakIncrease;
     private long resetTimer;
 
     public VotePlayer(UUID uuid) {
@@ -23,28 +28,66 @@ public class VotePlayer {
         } catch (NullPointerException e) {
             setUserName("");
         }
+        initialiseStreak();
     }
 
-    public boolean streakExpired() {
+    public boolean streakNeedsUpdating() {
+        for (Streak s:VotingSupport.getStreakList()) {
+            if (s.getIdentifier().equals(streak.getIdentifier())) {
+                for (StreakDay d : streak.getStreakDayList()) {
+                    for (VoteReward r:d.getVoteRewards()) {
 
+                    }
+                }
+            }
+        }
         return false;
     }
 
     public void updateStreakProgress() {
+        if (streak.resetStreak()) {
+            initialiseStreak();
+            return;
+        }
 
+        streak.increaseStreakDay();
     }
 
     public void initialiseStreak() {
-        streak = new Streak("");
 
+        if (VotingSupport.getStreakList().isEmpty())
+            return;
+
+        for (Streak s: VotingSupport.getStreakList()) {
+            if (s.getPermissionNode().isEmpty()) {
+                setStreak(s);
+                break;
+            }
+            EntityPlayerMP p = Util.getPlayer(getUuid());
+            if (!Util.isOnline(p.getUniqueID()))
+                continue;
+
+            if (PermissionUtil.canUse(s.getPermissionNode(), p)) {
+                setStreak(s);
+                break;
+            }
+        }
     }
 
-    public void resetStreak() {
 
-    }
-
-    public void syncStreakWithConfig() {
-
+    public void syncStreakWithConfig(Streak streak) {
+        List <StreakDay> streakDayList = streak.getStreakDayList();
+        for (int i = 0, streakDayListSize = streakDayList.size(); i < streakDayListSize; i++) {
+            StreakDay d = streakDayList.get(i);
+            List <StreakDay> dayList = getStreak().getStreakDayList();
+            for (int j = 0, dayListSize = dayList.size(); j < dayListSize; j++) {
+                StreakDay sd = dayList.get(j);
+                if (!d.getIdentifier().equals(sd.getIdentifier()))
+                    continue;
+                d.setCompleted(sd.isCompleted());
+                dayList.set(j, d);
+            }
+        }
     }
 
     public void increaseVote(int i) {
@@ -99,6 +142,24 @@ public class VotePlayer {
         return lastVoted;
     }
 
+
+    public void markVote() {
+        setLastVoted(System.currentTimeMillis());
+        increaseVote();
+
+        if (TimeUnit.HOURS.toMillis(24) <= getLastStreakIncrease()) {
+            setLastStreakIncrease(System.currentTimeMillis());
+            updateStreakProgress();
+            return;
+        }
+
+        if (TimeUnit.HOURS.toMillis(48) <= getLastStreakIncrease()) {
+            initialiseStreak();
+            setLastStreakIncrease(System.currentTimeMillis());
+            updateStreakProgress();
+        }
+    }
+
     public void setLastVoted(long lastVoted) {
         this.lastVoted = lastVoted;
     }
@@ -112,13 +173,21 @@ public class VotePlayer {
     }
 
     public long timer() {
-        return ((getResetTimer() *1000 - (System.currentTimeMillis() - getLastVoted())) / 1000);
+        return ((getResetTimer() * 1000 - (System.currentTimeMillis() - getLastStreakIncrease()) / 1000));
     }
     public String timeLeftSeconds() {
-        long timer = ((getResetTimer() * 1000 - (System.currentTimeMillis() - getLastVoted()) / 1000));
+        long timer = ((getResetTimer() * 1000 - (System.currentTimeMillis() - getLastStreakIncrease()) / 1000));
         return String.valueOf(TimeUnit.SECONDS.toSeconds(timer));
     }
     public String timeLeftMinutes() {
         return String.valueOf(TimeUnit.SECONDS.toMinutes(timer()));
+    }
+
+    public long getLastStreakIncrease() {
+        return lastStreakIncrease;
+    }
+
+    public void setLastStreakIncrease(long lastStreakIncrease) {
+        this.lastStreakIncrease = lastStreakIncrease;
     }
 }

@@ -1,6 +1,10 @@
 package io.github.adainish.votingsupport.obj;
 
+import com.google.common.reflect.TypeToken;
+import info.pixelmon.repack.ninja.leaping.configurate.objectmapping.ObjectMappingException;
+import io.github.adainish.votingsupport.config.TopVoterConfig;
 import io.github.adainish.votingsupport.obj.rewards.VoteReward;
+import io.github.adainish.votingsupport.registry.RewardRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +17,7 @@ public class VoterSpot {
     private int position;
     private int totalVotes;
     private String message;
+    private List<String> rewardIdentifiers = new ArrayList <>();
     private List <VoteReward> rewardList = new ArrayList <>();
     private boolean received;
 
@@ -21,6 +26,27 @@ public class VoterSpot {
         setUuid(uuid);
         setPosition(position);
         setTotalVotes(totalVotes);
+        setMessage(TopVoterConfig.getConfig().get().getNode("TopVoter", String.valueOf(position), "Message").getString());
+        setReceived(false);
+        try {
+            setRewardIdentifiers(TopVoterConfig.getConfig().get().getNode("TopVoter", String.valueOf(position), "Rewards").getList(TypeToken.of(String.class)));
+        } catch (ObjectMappingException | NullPointerException e) {
+            setRewardIdentifiers(new ArrayList <>());
+        }
+        loadRewards();
+    }
+
+    public void loadRewards() {
+        if (getRewardIdentifiers().isEmpty())
+            return;
+
+        for (String s:getRewardIdentifiers()) {
+            for (VoteReward r: RewardRegistry.voterSpotRewardList) {
+                if (r.getIdentifier().equals(s))
+                    rewardList.add(r);
+            }
+        }
+
     }
 
     public UUID getUuid() {
@@ -85,5 +111,13 @@ public class VoterSpot {
 
     public void setRewardIdentifier(String rewardIdentifier) {
         this.rewardIdentifier = rewardIdentifier;
+    }
+
+    public List <String> getRewardIdentifiers() {
+        return rewardIdentifiers;
+    }
+
+    public void setRewardIdentifiers(List <String> rewardIdentifiers) {
+        this.rewardIdentifiers = rewardIdentifiers;
     }
 }

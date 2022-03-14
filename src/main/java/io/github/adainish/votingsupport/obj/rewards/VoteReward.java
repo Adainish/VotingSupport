@@ -11,6 +11,8 @@ public class VoteReward {
     private String identifier;
     private String itemDisplay;
     private String display;
+    private String message;
+    private String couldHaveMessage;
     private List<String> lore;
     private List<String> commandList;
     private String permission;
@@ -31,6 +33,8 @@ public class VoteReward {
         } catch (ObjectMappingException e) {
             setCommandList(new ArrayList<>());
         }
+        setMessage(RewardsConfig.getConfig().get().getNode("Rewards", identifier, "Message").getString());
+        setCouldHaveMessage(RewardsConfig.getConfig().get().getNode("Rewards", identifier, "CouldHave").getString());
         setPermission(RewardsConfig.getConfig().get().getNode("Rewards", identifier, "Permission").getString());
         setFrequency(RewardsConfig.getConfig().get().getNode("Rewards", identifier, "Frequency").getInt());
         setType(RewardsConfig.getConfig().get().getNode("Rewards", identifier, "Type").getString());
@@ -98,5 +102,21 @@ public class VoteReward {
 
     public void setFrequency(int frequency) {
         this.frequency = frequency;
+    }
+
+    public String getCouldHaveMessage() {
+        return couldHaveMessage;
+    }
+
+    public void setCouldHaveMessage(String couldHaveMessage) {
+        this.couldHaveMessage = couldHaveMessage;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

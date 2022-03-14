@@ -2,6 +2,7 @@ package io.github.adainish.votingsupport.obj;
 
 import com.google.common.reflect.TypeToken;
 import info.pixelmon.repack.ninja.leaping.configurate.objectmapping.ObjectMappingException;
+import io.github.adainish.votingsupport.VotingSupport;
 import io.github.adainish.votingsupport.config.VotePartyConfig;
 import io.github.adainish.votingsupport.util.Util;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -12,8 +13,8 @@ import java.util.List;
 public class VoteParty {
     private String display;
     private List <String> descriptionList = new ArrayList <>();
-    private List<String> individualCommands = new ArrayList <>();
-    private List<String> globalCommands = new ArrayList <>();
+    private List <String> individualCommands = new ArrayList <>();
+    private List <String> globalCommands = new ArrayList <>();
     private int requiredVotes;
     private int currentVotes;
 
@@ -61,7 +62,8 @@ public class VoteParty {
                     Util.runCommand(s.replace("@pl", pl.getName()));
                 }
             }
-        }
+            VotingSupport.regenVoteParty();
+        } VotingSupport.regenCachedVoteParty(this);
     }
 
     public boolean shouldExecuteVoteParty() {

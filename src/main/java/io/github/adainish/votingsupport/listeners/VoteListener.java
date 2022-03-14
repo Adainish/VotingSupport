@@ -3,6 +3,7 @@ package io.github.adainish.votingsupport.listeners;
 import com.vexsoftware.votifier.model.Vote;
 import com.vexsoftware.votifier.sponge.event.VotifierEvent;
 import io.github.adainish.votingsupport.VotingSupport;
+import io.github.adainish.votingsupport.handlers.RewardHandler;
 import io.github.adainish.votingsupport.obj.VotePlayer;
 import io.github.adainish.votingsupport.storage.PlayerStorage;
 import io.github.adainish.votingsupport.util.ProfileFetcher;
@@ -41,9 +42,8 @@ public class VoteListener {
         VotingSupport.log.info("Vote received from " + vote.getUsername());
 
         if (player != null) {
-            player.increaseVote();
-            player.setLastVoted(System.currentTimeMillis());
-            //execute reward handling
+            player.markVote();
+            RewardHandler.handOutVoteReward(player);
             PlayerStorage.savePlayer(player);
         }
 

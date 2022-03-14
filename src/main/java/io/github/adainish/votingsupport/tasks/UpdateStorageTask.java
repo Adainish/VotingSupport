@@ -28,6 +28,6 @@ public class UpdateStorageTask implements Runnable{
         }
 
         LeaderboardStorage.saveLeaderBoard(VotingSupport.getLeaderboard());
-        VotePartyStorage.saveVoteParty(VotePartyStorage.getVoteParty());
+        VotePartyStorage.saveVoteParty(VotingSupport.getParty());
     }
 }

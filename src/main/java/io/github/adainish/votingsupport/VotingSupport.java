@@ -1,13 +1,17 @@
 package io.github.adainish.votingsupport;
 
 import com.cable.library.tasks.Task;
+import com.pixelmonmod.pixelmon.api.storage.PartyStorage;
 import io.github.adainish.votingsupport.config.*;
 import io.github.adainish.votingsupport.listeners.PlayerListener;
 import io.github.adainish.votingsupport.obj.Leaderboard;
+import io.github.adainish.votingsupport.obj.Streak;
 import io.github.adainish.votingsupport.obj.VoteParty;
 import io.github.adainish.votingsupport.obj.VotePlayer;
+import io.github.adainish.votingsupport.registry.RewardRegistry;
 import io.github.adainish.votingsupport.storage.LeaderboardStorage;
 import io.github.adainish.votingsupport.storage.VotePartyStorage;
+import io.github.adainish.votingsupport.tasks.DueRewardsTask;
 import io.github.adainish.votingsupport.tasks.UpdateStorageTask;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -17,7 +21,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 @Mod(
@@ -44,6 +50,7 @@ public class VotingSupport {
     private static File configDir;
     private static File dataDir;
     private static File storageDir;
+    private static List <Streak> streakList = new ArrayList<>();
 
     private static VotingSupport instance;
     @Mod.Instance(MOD_ID)
@@ -83,6 +90,7 @@ public class VotingSupport {
     public void onServerStarting(FMLServerStartingEvent event) {
         loadObjects();
         Task.builder().infiniteIterations().interval( (20 * 60) * 5).execute(new UpdateStorageTask()).build();
+        Task.builder().infiniteIterations().interval( (20 * 60) * 2 ).execute(new DueRewardsTask()).build();
         //Register Commands
     }
 
@@ -144,6 +152,16 @@ public class VotingSupport {
         VotingSupport.party = party;
     }
 
+
+    public static List <Streak> getStreakList() {
+        return streakList;
+    }
+
+    public static void setStreakList(List <Streak> streakList) {
+        VotingSupport.streakList = streakList;
+    }
+
+
     public static void setupConfigs() {
         MainConfig.getConfig().setup();
         RewardsConfig.getConfig().setup();
@@ -163,6 +181,7 @@ public class VotingSupport {
         LeaderBoardConfig.getConfig().load();
     }
     public static void loadObjects() {
+        RewardRegistry.loadVoteRewardsToCache();
         initialiseLeaderBoard();
         initialiseVoteParty();
     }
@@ -179,6 +198,11 @@ public class VotingSupport {
         LeaderboardStorage.saveLeaderBoard(getLeaderboard());
     }
 
+    public static void regenCachedVoteParty(VoteParty p) {
+        setParty(p);
+        VotePartyStorage.saveVoteParty(p);
+    }
+
     public static void initialiseVoteParty() {
         VoteParty p = VotePartyStorage.getVoteParty();
 
@@ -189,5 +213,18 @@ public class VotingSupport {
 
         setParty(p);
         VotePartyStorage.saveVoteParty(getParty());
+    }
+
+    public static void regenVoteParty() {
+        VoteParty p = new VoteParty();
+        setParty(p);
+        VotePartyStorage.saveVoteParty(p);
+        log.info("Refreshed the Vote Party Data as one just occured");
+    }
+
+    public static void regenStreaks() {
+        getStreakList().clear();
+
+
     }
 }

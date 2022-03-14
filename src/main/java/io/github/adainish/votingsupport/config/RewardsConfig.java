@@ -38,6 +38,8 @@ public class RewardsConfig extends Configurable{
         this.get().getNode("Rewards",  "Reward", "CommandList").setValue(Arrays.asList("")).setComment("The commands to be executed when this reward is received");
         this.get().getNode("Rewards",  "Reward", "Permission").setValue("reward.example").setComment("The permission needed to be able to obtain this reward");
         this.get().getNode("Rewards",  "Reward", "Type").setValue("").setComment("The type of reward this reward is");
+        this.get().getNode("Rewards",  "Reward", "Message").setValue("&7You received the default reward for voting").setComment("The message sent if a player DOES have the permission node");
+        this.get().getNode("Rewards",  "Reward", "CouldHave").setValue("&7If you had Trainer rank you would have been able to get this reward...").setComment("The message sent if a player LACKS a permission node, informing them of what could have been");
     }
 
     @Override

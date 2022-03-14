@@ -1,9 +1,12 @@
 package io.github.adainish.votingsupport.util;
 
+import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
+import java.util.List;
 import java.util.UUID;
 
 public class Util {
@@ -16,6 +19,20 @@ public class Util {
 
     public static EntityPlayerMP getPlayer(UUID uuid) {
         return server.getPlayerList().getPlayerByUUID(uuid);
+    }
+
+    public static void runCommands(List <String> cmds) {
+        for (String s:cmds) {
+            runCommand(s);
+        }
+    }
+
+    public static boolean isOnline(UUID uuid) {
+        return getInstance().getPlayerList().getPlayers().stream().anyMatch(p -> p.getUniqueID().equals(uuid));
+    }
+
+    public static void send(ICommandSender sender, String message) {
+        sender.sendMessage(new TextComponentString((message).replaceAll("&([0-9a-fk-or])", "\u00a7$1")));
     }
 
     public static void runCommand(String cmd) {
