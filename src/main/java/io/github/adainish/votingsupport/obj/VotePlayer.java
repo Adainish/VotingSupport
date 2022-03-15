@@ -142,6 +142,11 @@ public class VotePlayer {
         return lastVoted;
     }
 
+    public void updateCache() {
+        VotingSupport.getVotePlayers().remove(uuid);
+        VotingSupport.getVotePlayers().put(uuid, this);
+    }
+
 
     public void markVote() {
         setLastVoted(System.currentTimeMillis());

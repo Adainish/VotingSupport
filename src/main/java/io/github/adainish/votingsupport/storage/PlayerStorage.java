@@ -65,7 +65,7 @@ public class PlayerStorage {
             e.printStackTrace();
         }
 
-        //update cache method
+        player.updateCache();
     }
 
     public static VotePlayer getPlayer(UUID uuid) {
