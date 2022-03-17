@@ -15,6 +15,7 @@ public class VotePlayer {
     private String userName;
     private int voteCount;
     private Streak streak;
+    private int leaderBoardCount = 0;
     private long lastVoted;
     private long lastStreakIncrease;
     private long resetTimer;
@@ -194,5 +195,13 @@ public class VotePlayer {
 
     public void setLastStreakIncrease(long lastStreakIncrease) {
         this.lastStreakIncrease = lastStreakIncrease;
+    }
+
+    public int getLeaderBoardCount() {
+        return leaderBoardCount;
+    }
+
+    public void setLeaderBoardCount(int leaderBoardCount) {
+        this.leaderBoardCount = leaderBoardCount;
     }
 }

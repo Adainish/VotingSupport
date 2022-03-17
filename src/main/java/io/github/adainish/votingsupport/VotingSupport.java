@@ -11,6 +11,7 @@ import io.github.adainish.votingsupport.obj.VotePlayer;
 import io.github.adainish.votingsupport.registry.RewardRegistry;
 import io.github.adainish.votingsupport.storage.LeaderboardStorage;
 import io.github.adainish.votingsupport.storage.VotePartyStorage;
+import io.github.adainish.votingsupport.tasks.CheckLeaderBoardTask;
 import io.github.adainish.votingsupport.tasks.DueRewardsTask;
 import io.github.adainish.votingsupport.tasks.UpdateStorageTask;
 import net.minecraftforge.common.MinecraftForge;
@@ -89,8 +90,11 @@ public class VotingSupport {
     @Mod.EventHandler
     public void onServerStarting(FMLServerStartingEvent event) {
         loadObjects();
+
         Task.builder().infiniteIterations().interval( (20 * 60) * 5).execute(new UpdateStorageTask()).build();
         Task.builder().infiniteIterations().interval( (20 * 60) * 2 ).execute(new DueRewardsTask()).build();
+        Task.builder().infiniteIterations().interval( (20 * 60) * 5).execute(new CheckLeaderBoardTask()).build();
+
         //Register Commands
     }
 
@@ -184,6 +188,15 @@ public class VotingSupport {
         RewardRegistry.loadVoteRewardsToCache();
         initialiseLeaderBoard();
         initialiseVoteParty();
+    }
+
+    public static void resetLeaderBoard() {
+        Leaderboard l = getLeaderboard();
+        l.setInitialisedTime(System.currentTimeMillis());
+        l.setValidDays(LeaderBoardConfig.getConfig().get().getNode("LeaderBoard", "ValidDays").getInt());
+        l.setAutomatic(LeaderBoardConfig.getConfig().get().getNode("LeaderBoard", "Automatic").getBoolean());
+        setLeaderboard(l);
+        LeaderboardStorage.saveLeaderBoard(l);
     }
 
     public static void initialiseLeaderBoard() {

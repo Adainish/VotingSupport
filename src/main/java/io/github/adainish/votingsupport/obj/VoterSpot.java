@@ -21,8 +21,7 @@ public class VoterSpot {
     private List <VoteReward> rewardList = new ArrayList <>();
     private boolean received;
 
-    public VoterSpot(UUID uuid, int position, int totalVotes, String identifier) {
-        setRewardIdentifier(identifier);
+    public VoterSpot(UUID uuid, int position, int totalVotes) {
         setUuid(uuid);
         setPosition(position);
         setTotalVotes(totalVotes);

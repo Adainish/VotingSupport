@@ -1,8 +1,12 @@
 package io.github.adainish.votingsupport.obj;
 
+import io.github.adainish.votingsupport.VotingSupport;
 import io.github.adainish.votingsupport.config.LeaderBoardConfig;
+import io.github.adainish.votingsupport.storage.PlayerStorage;
+import io.github.adainish.votingsupport.util.Util;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,13 +16,43 @@ public class Leaderboard {
     private List <UUID> playerUUIDList = new ArrayList <>();
     private long lastExecutedVoterCommands;
     private long initialisedTime;
-    private int validDays;
+    private long validDays;
     private boolean automatic;
 
     public Leaderboard() {
         setInitialisedTime(System.currentTimeMillis());
         setValidDays(LeaderBoardConfig.getConfig().get().getNode("LeaderBoard", "ValidDays").getInt());
         setAutomatic(LeaderBoardConfig.getConfig().get().getNode("LeaderBoard", "Automatic").getBoolean());
+    }
+
+    public boolean shouldReset() {
+        return ((getValidDays() * 1000 - (System.currentTimeMillis() - getInitialisedTime())) / 1000) <= 0;
+    }
+
+    public void cacheVoteSpots() {
+        List<VotePlayer> votePlayers = new ArrayList <>();
+        for (UUID uuid:playerUUIDList) {
+            VotePlayer p = null;
+            if (Util.isOnline(uuid))
+                p = VotingSupport.getVotePlayers().get(uuid);
+            else p = PlayerStorage.getPlayer(uuid);
+
+            if (p == null)
+                continue;
+
+            votePlayers.add(p);
+
+        }
+        votePlayers.sort(Comparator.comparing(VotePlayer::getLeaderBoardCount));
+        for (int i = 0; i < votePlayers.size(); i++) {
+            if (i == 3)
+                break;
+
+            VotePlayer p = votePlayers.get(i);
+            VoterSpot voterSpot = new VoterSpot(p.getUuid(), i, p.getLeaderBoardCount());
+            cachedVoterSpots.add(voterSpot);
+        }
+        VotingSupport.resetLeaderBoard();
     }
 
     public List <UUID> getPlayerUUIDList() {
@@ -53,11 +87,11 @@ public class Leaderboard {
         this.initialisedTime = initialisedTime;
     }
 
-    public int getValidDays() {
+    public long getValidDays() {
         return validDays;
     }
 
-    public void setValidDays(int validDays) {
+    public void setValidDays(long validDays) {
         this.validDays = validDays;
     }
 
