@@ -15,18 +15,33 @@ public class DueRewardsTask implements Runnable{
     @Override
     public void run() {
 
+        if (VotingSupport.getLeaderboard() == null)
+            return;
+
         if (VotingSupport.getLeaderboard().getCachedVoterSpots().isEmpty())
             return;
 
         List<VoterSpot> toRemove = new ArrayList <>();
-        List <VoterSpot> cachedVoterSpots = VotingSupport.getLeaderboard().getCachedVoterSpots();
-        for (VoterSpot s : cachedVoterSpots) {
+        List<VoterSpot> cachedVoterSpots = VotingSupport.getLeaderboard().getCachedVoterSpots();
 
-            EntityPlayerMP playerMP = Util.getPlayer(s.getUuid());
-            if (!Util.isOnline(playerMP.getUniqueID()))
+        if (cachedVoterSpots.isEmpty())
+            return;
+
+        for (int i = 0, cachedVoterSpotsSize = cachedVoterSpots.size(); i < cachedVoterSpotsSize; i++) {
+            VoterSpot s = cachedVoterSpots.get(i);
+
+            if (s == null)
                 continue;
 
-            Util.send(playerMP, s.getMessage());
+
+            if (!Util.isOnline(s.getUuid()))
+                continue;
+
+            EntityPlayerMP playerMP = Util.getPlayer(s.getUuid());
+
+            if (s.getMessage() != null && !s.getMessage().isEmpty()) {
+                Util.send(playerMP, s.getMessage());
+            }
             RewardHandler.handOutVoterTopRewards(s, playerMP);
             toRemove.add(s);
         }

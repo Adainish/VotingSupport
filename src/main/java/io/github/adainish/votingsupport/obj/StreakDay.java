@@ -3,7 +3,6 @@ package io.github.adainish.votingsupport.obj;
 import com.google.common.reflect.TypeToken;
 import info.pixelmon.repack.ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import io.github.adainish.votingsupport.config.StreakConfig;
-import io.github.adainish.votingsupport.obj.rewards.VoteReward;
 import io.github.adainish.votingsupport.registry.RewardRegistry;
 
 import java.util.ArrayList;

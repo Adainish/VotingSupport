@@ -7,12 +7,9 @@ public class CheckLeaderBoardTask implements Runnable{
 
     @Override
     public void run() {
-
         Leaderboard l = VotingSupport.getLeaderboard();
-
         if (l.shouldReset()) {
             l.cacheVoteSpots();
-            VotingSupport.resetLeaderBoard();
         }
     }
 }

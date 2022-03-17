@@ -4,6 +4,7 @@ import com.vexsoftware.votifier.model.Vote;
 import com.vexsoftware.votifier.sponge.event.VotifierEvent;
 import io.github.adainish.votingsupport.VotingSupport;
 import io.github.adainish.votingsupport.handlers.RewardHandler;
+import io.github.adainish.votingsupport.obj.VoteParty;
 import io.github.adainish.votingsupport.obj.VotePlayer;
 import io.github.adainish.votingsupport.storage.PlayerStorage;
 import io.github.adainish.votingsupport.util.ProfileFetcher;
@@ -45,9 +46,11 @@ public class VoteListener {
             player.markVote();
             RewardHandler.handOutVoteReward(player);
             PlayerStorage.savePlayer(player);
+            RewardHandler.updateLeaderBoard(player, 1);
         }
-
-        VotingSupport.getParty().increaseCurrentVotes();
+        VoteParty p = VotingSupport.getParty();
+        p.increaseCurrentVotes();
+        VotingSupport.setParty(p);
 
 
     }

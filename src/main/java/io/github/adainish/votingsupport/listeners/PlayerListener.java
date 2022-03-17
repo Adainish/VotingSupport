@@ -24,7 +24,12 @@ public class PlayerListener {
             vp = PlayerStorage.getPlayer(p.getUniqueID());
         }
 
-        VotingSupport.getVotePlayers().put(p.getUniqueID(), vp);
+        if (vp != null) {
+            if (vp.outdatedUserName()) {
+                vp.updateUserName();
+            }
+            vp.updateCache();
+        }
     }
 
 
@@ -32,7 +37,5 @@ public class PlayerListener {
     public void playerLoggedOutEvent(PlayerEvent.PlayerLoggedOutEvent event) {
 
         PlayerStorage.savePlayer(VotingSupport.getVotePlayers().get(event.player.getUniqueID()));
-        VotingSupport.getVotePlayers().remove(event.player.getUniqueID());
-
     }
 }

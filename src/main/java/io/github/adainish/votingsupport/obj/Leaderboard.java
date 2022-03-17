@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class Leaderboard {
 
@@ -26,7 +27,9 @@ public class Leaderboard {
     }
 
     public boolean shouldReset() {
-        return ((getValidDays() * 1000 - (System.currentTimeMillis() - getInitialisedTime())) / 1000) <= 0;
+        long timePassed = System.currentTimeMillis() - initialisedTime;
+        long timeNeeded = TimeUnit.DAYS.toMillis(getValidDays());
+        return timePassed > timeNeeded;
     }
 
     public void cacheVoteSpots() {
@@ -49,9 +52,10 @@ public class Leaderboard {
                 break;
 
             VotePlayer p = votePlayers.get(i);
-            VoterSpot voterSpot = new VoterSpot(p.getUuid(), i, p.getLeaderBoardCount());
+            VoterSpot voterSpot = new VoterSpot(p.getUuid(), i +1, p.getLeaderBoardCount());
             cachedVoterSpots.add(voterSpot);
         }
+        VotingSupport.setLeaderboard(this);
         VotingSupport.resetLeaderBoard();
     }
 

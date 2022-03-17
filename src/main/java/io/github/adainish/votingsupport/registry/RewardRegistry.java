@@ -3,7 +3,7 @@ package io.github.adainish.votingsupport.registry;
 import info.pixelmon.repack.ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import io.github.adainish.votingsupport.VotingSupport;
 import io.github.adainish.votingsupport.config.RewardsConfig;
-import io.github.adainish.votingsupport.obj.rewards.VoteReward;
+import io.github.adainish.votingsupport.obj.VoteReward;
 
 import java.util.ArrayList;
 import java.util.List;

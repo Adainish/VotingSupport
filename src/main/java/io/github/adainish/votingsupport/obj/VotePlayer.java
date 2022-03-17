@@ -1,11 +1,12 @@
 package io.github.adainish.votingsupport.obj;
 
 import io.github.adainish.votingsupport.VotingSupport;
-import io.github.adainish.votingsupport.obj.rewards.VoteReward;
 import io.github.adainish.votingsupport.util.PermissionUtil;
+import io.github.adainish.votingsupport.util.ProfileFetcher;
 import io.github.adainish.votingsupport.util.Util;
 import net.minecraft.entity.player.EntityPlayerMP;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -13,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 public class VotePlayer {
     private UUID uuid;
     private String userName;
-    private int voteCount;
+    private int voteCount = 0;
     private Streak streak;
     private int leaderBoardCount = 0;
     private long lastVoted;
@@ -30,6 +31,31 @@ public class VotePlayer {
             setUserName("");
         }
         initialiseStreak();
+    }
+
+    public boolean outdatedUserName() {
+        try {
+            return ProfileFetcher.getName(uuid).equals(userName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public void updateUserName() {
+        String newName = null;
+        try {
+            newName = ProfileFetcher.getName(uuid);
+        } catch (IOException e) {
+            VotingSupport.log.info("Something went wrong while attempting to update outdated player data, could not verify the account status with Mojang for Mojang UUID " + uuid);
+        } catch (NullPointerException e) {
+            VotingSupport.log.info("Something went wrong while attempting to update the outdated username for Mojang UUID :" + uuid);
+            return;
+        }
+        if (newName == null || newName.isEmpty())
+            return;
+
+        setUserName(newName);
     }
 
     public boolean streakNeedsUpdating() {
@@ -145,7 +171,9 @@ public class VotePlayer {
 
     public void updateCache() {
         VotingSupport.getVotePlayers().remove(uuid);
-        VotingSupport.getVotePlayers().put(uuid, this);
+        if (Util.isOnline(uuid)) {
+            VotingSupport.getVotePlayers().put(uuid, this);
+        }
     }
 
 
@@ -203,5 +231,9 @@ public class VotePlayer {
 
     public void setLeaderBoardCount(int leaderBoardCount) {
         this.leaderBoardCount = leaderBoardCount;
+    }
+
+    public void increaseLeaderboardCount(int i) {
+        this.leaderBoardCount += i;
     }
 }

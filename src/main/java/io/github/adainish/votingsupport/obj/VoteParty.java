@@ -67,7 +67,7 @@ public class VoteParty {
     }
 
     public boolean shouldExecuteVoteParty() {
-        return requiredVotes >= currentVotes;
+        return currentVotes >= requiredVotes;
     }
 
     public void increaseCurrentVotes() {

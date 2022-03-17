@@ -1,4 +1,4 @@
-package io.github.adainish.votingsupport.obj.rewards;
+package io.github.adainish.votingsupport.obj;
 
 import com.google.common.reflect.TypeToken;
 import info.pixelmon.repack.ninja.leaping.configurate.objectmapping.ObjectMappingException;

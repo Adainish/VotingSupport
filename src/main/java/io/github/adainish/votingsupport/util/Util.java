@@ -6,6 +6,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,5 +38,19 @@ public class Util {
 
     public static void runCommand(String cmd) {
         server.getCommandManager().executeCommand(server, cmd);
+    }
+
+    public static String formattedString(String s) {
+        return s.replaceAll("&", "§");
+    }
+
+    public static List<String> formattedArrayList(List<String> list) {
+
+        List<String> formattedList = new ArrayList <>();
+        for (String s:list) {
+            formattedList.add(formattedString(s));
+        }
+
+        return formattedList;
     }
 }

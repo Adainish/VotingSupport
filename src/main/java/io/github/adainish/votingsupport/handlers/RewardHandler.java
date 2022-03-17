@@ -1,12 +1,12 @@
 package io.github.adainish.votingsupport.handlers;
 
 import io.github.adainish.votingsupport.VotingSupport;
-import io.github.adainish.votingsupport.obj.Streak;
 import io.github.adainish.votingsupport.obj.StreakDay;
 import io.github.adainish.votingsupport.obj.VotePlayer;
 import io.github.adainish.votingsupport.obj.VoterSpot;
-import io.github.adainish.votingsupport.obj.rewards.VoteReward;
+import io.github.adainish.votingsupport.obj.VoteReward;
 import io.github.adainish.votingsupport.registry.RewardRegistry;
+import io.github.adainish.votingsupport.storage.PlayerStorage;
 import io.github.adainish.votingsupport.util.PermissionUtil;
 import io.github.adainish.votingsupport.util.Util;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -15,6 +15,19 @@ import java.util.List;
 import java.util.Random;
 
 public class RewardHandler {
+
+    public static void updateLeaderBoard(VotePlayer p, int voteCount) {
+        if (!VotingSupport.getLeaderboard().getPlayerUUIDList().contains(p.getUuid()))
+            VotingSupport.getLeaderboard().getPlayerUUIDList().add(p.getUuid());
+        p.setLeaderBoardCount(voteCount);
+        p.setVoteCount(voteCount);
+        if (Util.isOnline(p.getUuid())) {
+            VotingSupport.getVotePlayers().remove(p.getUuid());
+            VotingSupport.getVotePlayers().put(p.getUuid(), p);
+        } else {
+            PlayerStorage.savePlayer(p);
+        }
+    }
 
     public static void handOutVoteReward(EntityPlayerMP playerMP) {
         VoteReward r = pickReward(RewardRegistry.voteRewardList);
@@ -31,6 +44,13 @@ public class RewardHandler {
 
     public static void handOutVoteReward(VotePlayer player)
     {
+        if (!Util.isOnline(player.getUuid())) {
+            VotingSupport.log.info("%p || %u did not get their vote reward"
+                    .replace("%p", player.getUserName())
+                    .replace("%u", String.valueOf(player.getUuid()))
+            );
+            return;
+        }
         EntityPlayerMP playerMP = Util.getPlayer(player.getUuid());
         VoteReward r = pickReward(RewardRegistry.voteRewardList);
         if (r == null) {
@@ -46,7 +66,10 @@ public class RewardHandler {
 
     public static VoteReward pickReward(List <VoteReward> rewardList) {
         int weightSum = 0;
-
+        if (rewardList.isEmpty()) {
+            VotingSupport.log.info("No vote rewards exist, failed to initialise");
+            return null;
+        }
         for (VoteReward reward: rewardList) {
             weightSum += reward.getFrequency();
         }
