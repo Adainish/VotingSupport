@@ -1,14 +1,13 @@
 package io.github.adainish.votingsupport.commands;
 
 import ca.landonjw.gooeylibs2.api.UIManager;
-import ca.landonjw.gooeylibs2.api.page.GooeyPage;
-import com.cable.library.tasks.Task;
 import com.google.common.reflect.TypeToken;
 import info.pixelmon.repack.ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import io.github.adainish.votingsupport.VotingSupport;
 import io.github.adainish.votingsupport.config.MainConfig;
-import io.github.adainish.votingsupport.gui.VotePartyGUI;
+import io.github.adainish.votingsupport.gui.StreakGUI;
 import io.github.adainish.votingsupport.obj.Message;
+import io.github.adainish.votingsupport.obj.VotePlayer;
 import io.github.adainish.votingsupport.util.PermissionUtil;
 import io.github.adainish.votingsupport.util.Util;
 import net.minecraft.command.CommandBase;
@@ -22,16 +21,17 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-public class VoteCommand extends CommandBase {
+public class VoteStreakCommand extends CommandBase {
     @Override
     public String getName() {
-        return "vote";
+        return "streak";
     }
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "/vote";
+        return "/streak";
     }
 
     public void sendNoPermMessage(ICommandSender sender) {
@@ -41,7 +41,7 @@ public class VoteCommand extends CommandBase {
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 
-        if (!PermissionUtil.canUse("votingsupport.command.vote.base", sender)) {
+        if (!PermissionUtil.canUse("votingsupport.command.votestreak.base", sender)) {
             sendNoPermMessage(sender);
             return;
         }
@@ -50,22 +50,13 @@ public class VoteCommand extends CommandBase {
             Util.send(sender, getUsage(sender));
             return;
         }
-
-        List<String> messageStrings = null;
-        try {
-            messageStrings = MainConfig.getConfig().get().getNode("VoteMessage").getList(TypeToken.of(String.class));
-        } catch (ObjectMappingException e) {
-            messageStrings = new ArrayList <>();
-            return;
-        }
-
-        if (messageStrings == null) {
-            Util.send(sender, "&4&l(&e&l!&4&l) &cSomething went wrong loading the vote command, please report this to an Administrator!");
-            return;
-        }
         if (sender instanceof EntityPlayer) {
-            Message message = new Message(messageStrings, (EntityPlayerMP) sender);
-            message.sendMessage();
+            VotePlayer p = VotingSupport.getVotePlayers().get(((EntityPlayer) sender).getUniqueID());
+            if (p == null) {
+                Util.send(sender, "&cSomething went wrong loading your playerdata, please contact an Administrator!");
+                return;
+            }
+            UIManager.openUIPassively((EntityPlayerMP) sender, StreakGUI.StreakDisplay(p), 20, TimeUnit.SECONDS);
         } else {
             Util.send(sender, "&cOnly a player may use this command");
         }
@@ -79,7 +70,7 @@ public class VoteCommand extends CommandBase {
 
     @Override
     public @NotNull List <String> getAliases() {
-        return Arrays.asList("vo");
+        return Arrays.asList("vs", "votestreak");
     }
 
     @Override

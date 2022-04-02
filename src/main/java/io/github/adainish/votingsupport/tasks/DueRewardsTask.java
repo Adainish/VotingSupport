@@ -10,19 +10,21 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import java.util.ArrayList;
 import java.util.List;
 
+import static io.github.adainish.votingsupport.VotingSupport.getLeaderboard;
+
 public class DueRewardsTask implements Runnable{
 
     @Override
     public void run() {
 
-        if (VotingSupport.getLeaderboard() == null)
+        if (getLeaderboard() == null)
             return;
 
-        if (VotingSupport.getLeaderboard().getCachedVoterSpots().isEmpty())
+        if (getLeaderboard().getCachedVoterSpots().isEmpty())
             return;
 
         List<VoterSpot> toRemove = new ArrayList <>();
-        List<VoterSpot> cachedVoterSpots = VotingSupport.getLeaderboard().getCachedVoterSpots();
+        List<VoterSpot> cachedVoterSpots = getLeaderboard().getCachedVoterSpots();
 
         if (cachedVoterSpots.isEmpty())
             return;
@@ -46,7 +48,10 @@ public class DueRewardsTask implements Runnable{
             toRemove.add(s);
         }
 
-        Leaderboard l = VotingSupport.getLeaderboard();
+        Leaderboard l = getLeaderboard();
+
+        if (l == null)
+            return;
 
         l.getCachedVoterSpots().removeAll(toRemove);
         VotingSupport.setLeaderboard(l);

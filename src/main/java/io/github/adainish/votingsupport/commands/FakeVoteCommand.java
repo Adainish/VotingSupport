@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 public class FakeVoteCommand extends CommandBase {
     @Override
@@ -35,7 +34,7 @@ public class FakeVoteCommand extends CommandBase {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "/fakevote";
+        return "/fakevote <add/set> <vote/streak> <amount>";
     }
 
     public void sendNoPermMessage(ICommandSender sender) {
@@ -53,7 +52,7 @@ public class FakeVoteCommand extends CommandBase {
         switch (args.length) {
             case 1: {
                 if (args[0].equalsIgnoreCase("add")) {
-                    if (PermissionUtil.canUse("votingsupport.command.fakevote.reset", sender)) {
+                    if (PermissionUtil.canUse("votingsupport.command.fakevote.add", sender)) {
                         Util.send(sender, "&cPlease provide a valid streak/vote count option, as well as a player!");
                     } else sendNoPermMessage(sender);
                 }
@@ -138,7 +137,9 @@ public class FakeVoteCommand extends CommandBase {
                     }
 
                     if (args[1].equalsIgnoreCase("streak")) {
-
+                        p.getStreak().increaseStreakDay(amount);
+                        VotingSupport.log.info("Forcefully increased the streak count for " + p.getUserName() + " " + p.getUuid() + " by :" + amount);
+                        VotingSupport.log.info("They now have new rewards available");
                     }
                     p.updateCache();
 
@@ -176,7 +177,8 @@ public class FakeVoteCommand extends CommandBase {
                     }
 
                     if (args[1].equalsIgnoreCase("streak")) {
-
+                        p.getStreak().setStreakDay(amount);
+                        VotingSupport.log.info("Forcefully set the Streak Day for " + p.getUserName() + " " + p.getUuid() + " by :" + amount);
                     }
                     p.updateCache();
                 }
@@ -184,8 +186,7 @@ public class FakeVoteCommand extends CommandBase {
             }
             default: {
                 if (sender instanceof EntityPlayer) {
-                    LinkedPage p = LeaderBoardGUI.LeaderBoardDisplay();
-                    UIManager.openUIPassively((EntityPlayerMP) sender, p, 20, TimeUnit.SECONDS);
+                    Util.send(sender, getUsage(sender));
                 } else {
                     Util.send(sender, "&cOnly a player may use this command");
                     return;

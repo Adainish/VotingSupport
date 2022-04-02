@@ -14,6 +14,7 @@ import org.spongepowered.api.event.Listener;
 
 import java.io.IOException;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class VoteListener {
 
@@ -45,6 +46,9 @@ public class VoteListener {
         if (player != null) {
             player.markVote();
             RewardHandler.handOutVoteReward(player);
+            if (TimeUnit.MILLISECONDS.toHours(player.getStreak().getLastUpdated()) >= 24) {
+                player.getStreak().increaseStreakDay();
+            }
             PlayerStorage.savePlayer(player);
             RewardHandler.updateLeaderBoard(player, 1);
         }

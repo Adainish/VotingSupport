@@ -56,6 +56,10 @@ public class Streak {
         this.streakDay++;
     }
 
+    public void increaseStreakDay(int amount) {
+        this.streakDay += amount;
+    }
+
     public String getDisplay() {
         return display;
     }

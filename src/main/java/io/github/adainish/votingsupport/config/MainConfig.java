@@ -22,7 +22,7 @@ public class MainConfig extends Configurable{
     @Override
     public void populate() {
 
-        this.get().getNode("").setValue("").setComment("");
+        this.get().getNode("VoteMessage").setValue(Arrays.asList("This is a series of strings that are sent to a user wishing to vote", "&cThey also support Colour Codes", "cmd:</msg @pl hi> command execution and ", "url: mywebsite.com &cwebsite links!")).setComment("");
 
     }
 

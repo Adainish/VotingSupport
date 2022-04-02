@@ -15,6 +15,7 @@ public class StreakDay {
     private String display;
     private List <String> loreList = new ArrayList <>();
     private boolean completed;
+    private boolean claimed;
     private List<String> rewardIdentifiers = new ArrayList <>();
     private List<VoteReward> voteRewards = new ArrayList <>();
 
@@ -22,6 +23,8 @@ public class StreakDay {
         setIdentifier(identifier);
         setDisplay(StreakConfig.getConfig().get().getNode("Streak", identifier, "StreakDays", "Display").getString());
         setItemDisplay(StreakConfig.getConfig().get().getNode("Streak", identifier, "StreakDays", "ItemDisplay").getString());
+        setClaimed(false);
+        setCompleted(false);
         try {
             setLoreList(StreakConfig.getConfig().get().getNode("Streak", identifier, "StreakDays", "Lore").getList(TypeToken.of(String.class)));
         } catch (ObjectMappingException e) {
@@ -103,5 +106,13 @@ public class StreakDay {
 
     public void setRewardIdentifiers(List <String> rewardIdentifiers) {
         this.rewardIdentifiers = rewardIdentifiers;
+    }
+
+    public boolean isClaimed() {
+        return claimed;
+    }
+
+    public void setClaimed(boolean claimed) {
+        this.claimed = claimed;
     }
 }

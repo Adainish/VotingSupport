@@ -102,10 +102,12 @@ public class RewardHandler {
         }
     }
 
-    public static void handOutStreakDayRewards(StreakDay day, EntityPlayerMP player) {
+    public static void handOutStreakDayRewards(StreakDay day, EntityPlayerMP player, VotePlayer p) {
         for (VoteReward r:day.getVoteRewards()) {
             handOutReward(player, r);
         }
+        day.setClaimed(true);
+        p.updateCache();
     }
 
 }

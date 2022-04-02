@@ -2,9 +2,7 @@ package io.github.adainish.votingsupport;
 
 import com.cable.library.tasks.Task;
 import com.pixelmonmod.pixelmon.api.storage.PartyStorage;
-import io.github.adainish.votingsupport.commands.VoteCheckCommand;
-import io.github.adainish.votingsupport.commands.VotePartyCommand;
-import io.github.adainish.votingsupport.commands.VoteTopCommand;
+import io.github.adainish.votingsupport.commands.*;
 import io.github.adainish.votingsupport.config.*;
 import io.github.adainish.votingsupport.listeners.PlayerListener;
 import io.github.adainish.votingsupport.obj.Leaderboard;
@@ -104,9 +102,12 @@ public class VotingSupport {
 
 
     public static void registerCommands(FMLServerStartingEvent event) {
+        event.registerServerCommand(new VoteCommand());
         event.registerServerCommand(new VoteTopCommand());
         event.registerServerCommand(new VotePartyCommand());
         event.registerServerCommand(new VoteCheckCommand());
+        event.registerServerCommand(new FakeVoteCommand());
+        event.registerServerCommand(new VoteStreakCommand());
     }
 
     public static HashMap <UUID, VotePlayer> getVotePlayers() {
@@ -247,7 +248,6 @@ public class VotingSupport {
 
     public static void regenStreaks() {
         getStreakList().clear();
-
 
     }
 }
