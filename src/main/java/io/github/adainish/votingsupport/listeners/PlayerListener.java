@@ -35,7 +35,12 @@ public class PlayerListener {
 
     @SubscribeEvent
     public void playerLoggedOutEvent(PlayerEvent.PlayerLoggedOutEvent event) {
+        if (event.player == null)
+            return;
 
-        PlayerStorage.savePlayer(VotingSupport.getVotePlayers().get(event.player.getUniqueID()));
+        if (VotingSupport.getVotePlayers().containsKey(event.player.getUniqueID())) {
+            PlayerStorage.savePlayer(VotingSupport.getVotePlayers().get(event.player.getUniqueID()));
+        }
+
     }
 }
