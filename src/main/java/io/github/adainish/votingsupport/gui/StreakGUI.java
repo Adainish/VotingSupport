@@ -28,32 +28,33 @@ public class StreakGUI {
     public static List <Button> streakItems(VotePlayer p) {
         List<Button> buttonList = new ArrayList <>();
 
-        for (StreakDay d:p.getStreak().getStreakDayList()) {
-            Item i = Item.getByNameOrId(d.getItemDisplay());
-            if (i == null)
-                i = Items.PAPER;
-            ItemStack stack = new ItemStack(i);
+        if (p.getStreak() != null) {
+            for (StreakDay d : p.getStreak().getStreakDayList()) {
+                Item i = Item.getByNameOrId(d.getItemDisplay());
+                if (i == null)
+                    i = Items.PAPER;
+                ItemStack stack = new ItemStack(i);
 
-            Button b = GooeyButton.builder()
-                    .display(stack)
-                    .title(Util.formattedString(d.getDisplay()))
-                    .lore(Util.formattedArrayList(d.getLoreList()))
-                    .onClick(ba -> {
-                        UIManager.closeUI(ba.getPlayer());
-                        if (d.isCompleted()) {
-                            if (d.isClaimed()) {
-                                Util.send(ba.getPlayer(), "&cYou've already claimed this streak reward!");
+                Button b = GooeyButton.builder()
+                        .display(stack)
+                        .title(Util.formattedString(d.getDisplay()))
+                        .lore(Util.formattedArrayList(d.getLoreList()))
+                        .onClick(ba -> {
+                            UIManager.closeUI(ba.getPlayer());
+                            if (d.isCompleted()) {
+                                if (d.isClaimed()) {
+                                    Util.send(ba.getPlayer(), "&cYou've already claimed this streak reward!");
+                                } else {
+                                    RewardHandler.handOutStreakDayRewards(d, ba.getPlayer(), p);
+                                }
                             } else {
-                                RewardHandler.handOutStreakDayRewards(d, ba.getPlayer(), p);
+                                Util.send(ba.getPlayer(), "&cYou can't claim these rewards yet");
                             }
-                        }
-                        else {
-                            Util.send(ba.getPlayer(), "&cYou can't claim these rewards yet");
-                        }
-                    })
-                    .build();
+                        })
+                        .build();
 
-            buttonList.add(b);
+                buttonList.add(b);
+            }
         }
         return buttonList;
     }

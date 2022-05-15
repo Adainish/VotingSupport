@@ -28,6 +28,7 @@ public class PlayerListener {
             if (vp.outdatedUserName()) {
                 vp.updateUserName();
             }
+            vp.setStreak();
             vp.updateCache();
         }
     }

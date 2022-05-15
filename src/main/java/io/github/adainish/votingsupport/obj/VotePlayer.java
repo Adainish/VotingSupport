@@ -33,6 +33,21 @@ public class VotePlayer {
         initialiseStreak();
     }
 
+    public boolean hasActiveStreak() {
+        return streak != null;
+    }
+
+    public void setStreak() {
+        if (getStreak() == null) {
+            for (Streak s : VotingSupport.getStreakList()) {
+                if (PermissionUtil.canUse(streak.getPermissionNode(), Util.getPlayer(uuid))) {
+                    streak = s;
+                    break;
+                }
+            }
+        }
+    }
+
     public boolean outdatedUserName() {
         try {
             return ProfileFetcher.getName(uuid).equals(userName);
