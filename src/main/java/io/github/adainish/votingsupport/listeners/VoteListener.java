@@ -10,16 +10,15 @@ import io.github.adainish.votingsupport.storage.PlayerStorage;
 import io.github.adainish.votingsupport.util.ProfileFetcher;
 import io.github.adainish.votingsupport.util.Util;
 import net.minecraft.entity.player.EntityPlayerMP;
-import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.EventListener;
 
 import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-public class VoteListener {
+public class VoteListener implements EventListener <VotifierEvent> {
 
-    @Listener
-    public void onVote(VotifierEvent event) {
+    public void handle(VotifierEvent event) {
         Vote vote = event.getVote();
 
         UUID uuid = null;
