@@ -3,6 +3,7 @@ package io.github.adainish.votingsupport.listeners;
 import com.vexsoftware.votifier.model.Vote;
 import com.vexsoftware.votifier.sponge.event.VotifierEvent;
 import io.github.adainish.votingsupport.VotingSupport;
+import io.github.adainish.votingsupport.VotingSupportSponge;
 import io.github.adainish.votingsupport.handlers.RewardHandler;
 import io.github.adainish.votingsupport.obj.VoteParty;
 import io.github.adainish.votingsupport.obj.VotePlayer;
@@ -17,6 +18,10 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class VoteListener implements EventListener <VotifierEvent> {
+
+    public void register() {
+        VotingSupportSponge.getInstance().getGame().getEventManager().registerListener(VotingSupportSponge.class, VotifierEvent.class, this);
+    }
 
     public void handle(VotifierEvent event) {
         Vote vote = event.getVote();

@@ -29,12 +29,17 @@ public class VotingSupportSponge {
         VotingSupportSponge.instance = instance;
     }
 
+    public static VotingSupportSponge getInstance() {
+        return instance;
+    }
+
     @Listener
     public void onAboutToStart(GameAboutToStartServerEvent event) {
         VotingSupport.log.info("Initialising Sponge and Voting integration for Voting Support");
         setInstance(this);
-        game = instance.game;
-        this.game.getEventManager().registerListeners(this, new VoteListener());
+        setGame(getInstance().getGame());
+        VoteListener voteListener = new VoteListener();
+        voteListener.register();
     }
 
     @Listener
@@ -50,5 +55,13 @@ public class VotingSupportSponge {
 
     public void setPlugin(PluginContainer plugin) {
         this.plugin = plugin;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 }
