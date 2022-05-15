@@ -42,8 +42,8 @@ public class RewardRegistry {
                             break;
                         }
                     }
-                } else VotingSupport.log.info("%node% returned null, check your config!");
-            } VotingSupport.log.info("%node% returned null, check your config!");
+                } else VotingSupport.log.info("a node from the Rewards config returned null, check your config!");
+            } VotingSupport.log.info("a node from the Rewards config null, check your config!");
         }
 
 

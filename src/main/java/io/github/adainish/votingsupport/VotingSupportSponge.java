@@ -7,6 +7,7 @@ import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameAboutToStartServerEvent;
+import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
@@ -24,6 +25,7 @@ public class VotingSupportSponge {
     @Inject private Logger logger;
     @Inject private Game game;
     private PluginContainer plugin;
+    public static VoteListener voteListener;
 
     public static void setInstance(VotingSupportSponge instance) {
         VotingSupportSponge.instance = instance;
@@ -34,12 +36,11 @@ public class VotingSupportSponge {
     }
 
     @Listener
-    public void onAboutToStart(GameAboutToStartServerEvent event) {
+    public void onAboutToStart(GamePreInitializationEvent event) {
         VotingSupport.log.info("Initialising Sponge and Voting integration for Voting Support");
         setInstance(this);
         setGame(getInstance().getGame());
-        VoteListener voteListener = new VoteListener();
-        voteListener.register();
+        game.getEventManager().registerListeners(this, new VoteListener());
     }
 
     @Listener

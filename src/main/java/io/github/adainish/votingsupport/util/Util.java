@@ -1,5 +1,6 @@
 package io.github.adainish.votingsupport.util;
 
+import io.github.adainish.votingsupport.VotingSupport;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
@@ -25,6 +26,18 @@ public class Util {
     public static void runCommands(List <String> cmds) {
         for (String s:cmds) {
             runCommand(s);
+        }
+    }
+
+    public static void runCommands(List <String> cmds, EntityPlayerMP target) {
+        if (target == null) {
+            VotingSupport.log.info("Someone voted while offline and didn't get their rewards");
+            return;
+        }
+        if (isOnline(target.getUniqueID())) {
+            for (String s : cmds) {
+                runCommand(s.replace("@pl", target.getName()));
+            }
         }
     }
 

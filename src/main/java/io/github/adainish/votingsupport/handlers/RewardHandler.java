@@ -17,6 +17,10 @@ import java.util.Random;
 public class RewardHandler {
 
     public static void updateLeaderBoard(VotePlayer p, int voteCount) {
+        if (VotingSupport.getLeaderboard() == null) {
+            VotingSupport.log.info("Tried updating the voting leaderboard but it's null! Please check your configs!");
+            return;
+        }
         if (!VotingSupport.getLeaderboard().getPlayerUUIDList().contains(p.getUuid()))
             VotingSupport.getLeaderboard().getPlayerUUIDList().add(p.getUuid());
         p.setLeaderBoardCount(voteCount);
@@ -89,9 +93,9 @@ public class RewardHandler {
     public static void handOutReward(EntityPlayerMP player, VoteReward reward) {
         if (reward.getPermission().isEmpty()) {
             Util.send(player, reward.getMessage());
-            Util.runCommands(reward.getCommandList());
+            Util.runCommands(reward.getCommandList(), player);
         } else if (PermissionUtil.canUse(reward.getPermission(), player)) {
-            Util.runCommands(reward.getCommandList());
+            Util.runCommands(reward.getCommandList(), player);
             Util.send(player, reward.getMessage());
         } else Util.send(player, reward.getMessage());
     }
