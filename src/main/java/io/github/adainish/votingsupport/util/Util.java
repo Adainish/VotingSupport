@@ -38,6 +38,8 @@ public class Util {
             for (String s : cmds) {
                 runCommand(s.replace("@pl", target.getName()));
             }
+        } else {
+            VotingSupport.log.info("Someone voted while offline and didn't get their rewards");
         }
     }
 

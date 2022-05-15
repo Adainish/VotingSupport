@@ -37,6 +37,9 @@ public class VoteListener {
             return;
         }
         try {
+            if (!Util.isOnline(uuid)) {
+                VotingSupport.log.info(vote.getUsername() + " wasn't online while voting and did potentially not receive rewards");
+            }
             VotePlayer player = PlayerStorage.getPlayer(uuid);
             if (player == null) {
                 EntityPlayerMP p = Util.getPlayer(uuid);
