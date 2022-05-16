@@ -47,6 +47,10 @@ public class Util {
         return getInstance().getPlayerList().getPlayers().stream().anyMatch(p -> p.getUniqueID().equals(uuid));
     }
 
+    public static void send(ICommandSender sender, TextComponentString string) {
+        sender.sendMessage(string);
+    }
+
     public static void send(ICommandSender sender, String message) {
         sender.sendMessage(new TextComponentString((message).replaceAll("&([0-9a-fk-or])", "\u00a7$1")));
     }

@@ -1,5 +1,6 @@
 package io.github.adainish.votingsupport.obj;
 
+import io.github.adainish.votingsupport.util.Util;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.event.ClickEvent;
@@ -179,6 +180,9 @@ public class Message {
                 textComp.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, s1.replaceAll("@pl", target.getName())));
             }
             stringList.add(textComp);
+            for (TextComponentString it:stringList) {
+                Util.send(target, it);
+            }
         }
     }
 
