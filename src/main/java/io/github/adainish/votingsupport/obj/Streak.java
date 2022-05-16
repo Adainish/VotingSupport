@@ -1,12 +1,12 @@
 package io.github.adainish.votingsupport.obj;
 
 import info.pixelmon.repack.ninja.leaping.configurate.commented.CommentedConfigurationNode;
-import io.github.adainish.votingsupport.VotingSupport;
 import io.github.adainish.votingsupport.config.StreakConfig;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class Streak {
     private String permissionNode;
@@ -33,19 +33,8 @@ public class Streak {
         streakDayList.clear();
 
         CommentedConfigurationNode rootNode = StreakConfig.getConfig().get().getNode("Streak", identifier, "StreakDays");
-        Map nodeMap = rootNode.getChildrenMap();
-
-        for (Object nodeObject : nodeMap.keySet()) {
-            if (nodeObject == null) ;
-            else {
-                String node = nodeObject.toString();
-                if (node == null) ;
-                else {
-                    StreakDay day = new StreakDay(node);
-                    streakDayList.add(day);
-                }
-            }
-        }
+        Map<Object, ? extends CommentedConfigurationNode> nodeMap = rootNode.getChildrenMap();
+        nodeMap.keySet().stream().filter(Objects::nonNull).map(Object::toString).filter(Objects::nonNull).map(StreakDay::new).forEach(day -> streakDayList.add(day));
     }
 
     public boolean resetStreak() {

@@ -1,7 +1,6 @@
 package io.github.adainish.votingsupport;
 
 import com.cable.library.tasks.Task;
-import com.pixelmonmod.pixelmon.api.storage.PartyStorage;
 import io.github.adainish.votingsupport.commands.*;
 import io.github.adainish.votingsupport.config.*;
 import io.github.adainish.votingsupport.listeners.PlayerListener;
@@ -93,7 +92,7 @@ public class VotingSupport {
         loadObjects();
 
         Task.builder().infiniteIterations().interval( (20 * 60) * 5).execute(new UpdateStorageTask()).build();
-        Task.builder().infiniteIterations().interval( (20 * 60) * 2 ).execute(new DueRewardsTask()).build();
+        Task.builder().infiniteIterations().interval( (20 * 60) * 2).execute(new DueRewardsTask()).build();
         Task.builder().infiniteIterations().interval( (20 * 60) * 5).execute(new CheckLeaderBoardTask()).build();
 
         //Register Commands

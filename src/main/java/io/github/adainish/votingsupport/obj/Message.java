@@ -100,11 +100,8 @@ public class Message {
                         .replaceAll(">", "")
                         .replace("[", "")
                         .replace("]", "");
-                if (val.contains("/")) {
-                    fs.append(s1);
-                } else {
-                    fs.append(" ").append(s1);
-                }
+                if (val.contains("/")) fs.append(s1);
+                else fs.append(" ").append(s1);
             }
         }
 
@@ -115,11 +112,8 @@ public class Message {
         StringBuilder fs = new StringBuilder();
         String[] arr = s.split(" ");
         boolean shouldAppend = false;
-
         for (String val : arr) {
-            if (val.contains("[") || val.contains("<")) {
-                shouldAppend = true;
-            }
+            if (val.contains("[") || val.contains("<")) shouldAppend = true;
 
             if (val.contains("]") || val.contains(">")) {
                 fs.append(" ").append(val
@@ -136,14 +130,10 @@ public class Message {
                         .replaceAll(">", "")
                         .replace("[", "")
                         .replace("]", "");
-                if (val.contains("/")) {
-                    fs.append(s1);
-                } else {
-                    fs.append(" ").append(s1);
-                }
+                if (val.contains("/")) fs.append(s1);
+                else fs.append(" ").append(s1);
             }
         }
-
         return fs.toString();
     }
 
@@ -180,9 +170,7 @@ public class Message {
                 textComp.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, s1.replaceAll("@pl", target.getName())));
             }
             stringList.add(textComp);
-            for (TextComponentString it:stringList) {
-                Util.send(target, it);
-            }
+            stringList.forEach(it -> Util.send(target, it));
         }
     }
 
